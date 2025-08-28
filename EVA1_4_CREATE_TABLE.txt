@@ -1,0 +1,150 @@
+MySQL Shell 8.0.43
+
+Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 21
+Server version: 8.0.43 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > SHOW databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| prueba_tbd         |
+| sakila             |
+| sys                |
+| tbd1               |
+| world              |
++--------------------+
+8 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  SQL > USE tbd1;
+Default schema set to `tbd1`.
+Fetching global names, object names from `tbd1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd1  SQL > SHOW tables;
++----------------+
+| Tables_in_tbd1 |
++----------------+
+| persona        |
++----------------+
+1 row in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > DESC persona;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| ID       | int         | YES  |     | NULL    |       |
+| Nombre   | varchar(50) | YES  |     | NULL    |       |
+| Apellido | varchar(50) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > SHOW CREATE TABLE persona;
++---------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table   | Create Table                                                                                                                                                                                    |
++---------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| persona | CREATE TABLE `persona` (
+  `ID` int DEFAULT NULL,
+  `Nombre` varchar(50) DEFAULT NULL,
+  `Apellido` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++---------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE customer(
+                                     -> cust-id INT,
+                                     -> custname VARCHAR(50),
+                                     -> address VARCHAR(100),
+                                     -> phone VARCHAR(15));
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-id INT,
+custname VARCHAR(50),
+address VARCHAR(100),
+phone VARCHAR(15))' at line 2
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE customer( cust_id INT, cust_name VARCHAR(50), address VARCHAR(100), phone VARCHAR(15));
+Query OK, 0 rows affected (0.0287 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > SHOW TABLES;
++----------------+
+| Tables_in_tbd1 |
++----------------+
+| customer       |
+| persona        |
++----------------+
+2 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > DESC customer;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| cust_id   | int          | YES  |     | NULL    |       |
+| cust_name | varchar(50)  | YES  |     | NULL    |       |
+| address   | varchar(100) | YES  |     | NULL    |       |
+| phone     | varchar(15)  | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+4 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > DROP TABLE customer;
+Query OK, 0 rows affected (0.0218 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE customer(
+                                     -> cust_id INT NOT NULL,
+                                     -> cust_name VARCHAR(50) NOT NULL,
+                                     -> address VARCHAR(100) NULL,
+                                     -> phone VARCHAR(15));
+Query OK, 0 rows affected (0.0332 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > DESC customer;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| cust_id   | int          | NO   |     | NULL    |       |
+| cust_name | varchar(50)  | NO   |     | NULL    |       |
+| address   | varchar(100) | YES  |     | NULL    |       |
+| phone     | varchar(15)  | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+4 rows in set (0.0024 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > DROP TABLE customer;
+Query OK, 0 rows affected (0.0238 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE customer(
+                                     -> cust_id INT NOT NULL AUTO_INCREMENT,
+
+                                     -> cust_name VARCHAR(50) NOT NULL,
+                                     -> address VARCHAR(100) NULL,
+                                     -> phone VARCHAR(15) NULL);
+ERROR: 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE customer( cust_id INT NOT NULL AUTO_INCREMENT KEY, cust_name VARCHAR(50) NOT NULL, address VARCHAR(100) NULL, phone VARCHAR(15) NULL);
+Query OK, 0 rows affected (0.0326 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > DESC customer;
++-----------+--------------+------+-----+---------+----------------+
+| Field     | Type         | Null | Key | Default | Extra          |
++-----------+--------------+------+-----+---------+----------------+
+| cust_id   | int          | NO   | PRI | NULL    | auto_increment |
+| cust_name | varchar(50)  | NO   |     | NULL    |                |
+| address   | varchar(100) | YES  |     | NULL    |                |
+| phone     | varchar(15)  | YES  |     | NULL    |                |
++-----------+--------------+------+-----+---------+----------------+
+4 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE student(
+                                     -> name VARCHAR(50) NOT NULL,
+                                     -> ssn VARCHAR(11) NOT NULL PRIMARY KEY,
+                                     -> home_phone VARCHAR(15) NULL,
+                                     -> address VARCHAR(50) NOT NULL,
+                                     -> office_phone VARCHAR(15) NULL,
+                                     -> age INT NOT NULL,
+                                     -> gpa DECIMAL(3,2) NOT NULL);
+Query OK, 0 rows affected (0.0291 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > DESC student;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| name         | varchar(50)  | NO   |     | NULL    |       |
+| ssn          | varchar(11)  | NO   | PRI | NULL    |       |
+| home_phone   | varchar(15)  | YES  |     | NULL    |       |
+| address      | varchar(50)  | NO   |     | NULL    |       |
+| office_phone | varchar(15)  | YES  |     | NULL    |       |
+| age          | int          | NO   |     | NULL    |       |
+| gpa          | decimal(3,2) | NO   |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+7 rows in set (0.0021 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL >
