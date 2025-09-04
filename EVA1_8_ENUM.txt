@@ -1,0 +1,105 @@
+MySQL Shell 8.0.43
+
+Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 23
+Server version: 8.0.43 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > USE tbd1;
+Default schema set to `tbd1`.
+Fetching global names, object names from `tbd1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd1  SQL > SHOW TABLES;
++----------------+
+| Tables_in_tbd1 |
++----------------+
+| cliente        |
+| cliente_datos  |
+| customer       |
+| docente        |
+| persona        |
+| student        |
++----------------+
+6 rows in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE playera(
+                                     -> ID INT NOT NULL AUTO_INCREMENT KEY,
+                                     -> Nombre VARCHAR(50) NOT NULL,
+                                     -> Talla ENUM("x-small", "small", "medium", "large", "x-large", "xx-large"));
+Query OK, 0 rows affected (0.0454 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > DESC playera;
++--------+---------------------------------------------------------------+------+-----+---------+----------------+
+| Field  | Type                                                          | Null | Key | Default | Extra          |
++--------+---------------------------------------------------------------+------+-----+---------+----------------+
+| ID     | int                                                           | NO   | PRI | NULL    | auto_increment |
+| Nombre | varchar(50)                                                   | NO   |     | NULL    |                |
+| Talla  | enum('x-small','small','medium','large','x-large','xx-large') | YES  |     | NULL    |                |
++--------+---------------------------------------------------------------+------+-----+---------+----------------+
+3 rows in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO playera(Nombre, Talla)
+                                     -> VALUES("Playera 1", "small"), ("Playera2", 3)("Playera 3", 1);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '("Playera 3", 1)' at line 2
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO playera(Nombre, Talla) VALUES("Playera 1", "small"), ("Playera2", 3)("Playera 3", 4);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '("Playera 3", 4)' at line 1
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO playera(Nombre, Talla) VALUES("Playera 1", "small"), ("Playera2", 3),("Playera 3", 4);
+Query OK, 3 rows affected (0.0161 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd1  SQL > SELECT * FROM playera;
++----+-----------+--------+
+| ID | Nombre    | Talla  |
++----+-----------+--------+
+|  1 | Playera 1 | small  |
+|  2 | Playera2  | medium |
+|  3 | Playera 3 | large  |
++----+-----------+--------+
+3 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE Ficha(
+                                     -> ID INT NOT NULL AUTO_INCREMENT KEY,
+                                     -> Nombre VARCHAR(50) NOT NULL,
+                                     -> Apellidos VARCHAR(50) NOT NULL,
+                                     -> Fecha_Nac DATE NOT NULL);
+Query OK, 0 rows affected (0.0354 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > DESC Ficha;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| ID        | int         | NO   | PRI | NULL    | auto_increment |
+| Nombre    | varchar(50) | NO   |     | NULL    |                |
+| Apellidos | varchar(50) | NO   |     | NULL    |                |
+| Fecha_Nac | date        | NO   |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+4 rows in set (0.0026 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO Ficha(Nombre, Apellidos, Fecha_Nac)
+                                     -> VALUE("Valeria", "Torres", "2004-03-18");
+Query OK, 1 row affected (0.0163 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > SELECT * FROM Ficha;
++----+---------+-----------+------------+
+| ID | Nombre  | Apellidos | Fecha_Nac  |
++----+---------+-----------+------------+
+|  1 | Valeria | Torres    | 2004-03-18 |
++----+---------+-----------+------------+
+1 row in set (0.0008 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > ALTER TABLE Ficha
+                                     -> ADD COLUMN Carrera ENUM("ISC", "Ciber", "ADMON", "ARQ", "IND", "DI", "GEST");
+Query OK, 0 rows affected (0.0361 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd1  SQL > DESC ficha;
++-----------+-----------------------------------------------------+------+-----+---------+----------------+
+| Field     | Type                                                | Null | Key | Default | Extra          |
++-----------+-----------------------------------------------------+------+-----+---------+----------------+
+| ID        | int                                                 | NO   | PRI | NULL    | auto_increment |
+| Nombre    | varchar(50)                                         | NO   |     | NULL    |                |
+| Apellidos | varchar(50)                                         | NO   |     | NULL    |                |
+| Fecha_Nac | date                                                | NO   |     | NULL    |                |
+| Carrera   | enum('ISC','Ciber','ADMON','ARQ','IND','DI','GEST') | YES  |     | NULL    |                |
++-----------+-----------------------------------------------------+------+-----+---------+----------------+
+5 rows in set (0.0022 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL >
