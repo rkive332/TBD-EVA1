@@ -1,0 +1,209 @@
+MySQL Shell 8.0.43
+
+Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.43 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > USE tbd1;
+Default schema set to `tbd1`.
+Fetching global names, object names from `tbd1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd1  SQL > SHOW TABLES;
++----------------+
+| Tables_in_tbd1 |
++----------------+
+| cliente        |
+| cliente_datos  |
+| curso          |
+| customer       |
+| docente        |
+| estudiante     |
+| ficha          |
+| persona        |
+| playera        |
+| student        |
++----------------+
+10 rows in set (0.0137 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > DESC estudiantes;
+ERROR: 1146 (42S02): Table 'tbd1.estudiantes' doesn't exist
+ MySQL  localhost:3306 ssl  tbd1  SQL > DESC estudiante;
++----------+-------------------------------------------+------+-----+---------+----------------+
+| Field    | Type                                      | Null | Key | Default | Extra          |
++----------+-------------------------------------------+------+-----+---------+----------------+
+| IDSt     | int                                       | NO   | PRI | NULL    | auto_increment |
+| LastName | varchar(50)                               | NO   |     | NULL    |                |
+| Grade    | enum('1','2','3','4','5','6','7','8','9') | YES  |     | NULL    |                |
++----------+-------------------------------------------+------+-----+---------+----------------+
+3 rows in set (0.0026 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > DROP TABLE estudiante;
+Query OK, 0 rows affected (0.0378 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE estudiante(
+                                     -> IDSt INT NOT NULL AUTO_INCREMENT KEY,
+                                     -> LastName VARCHAR(50) NOT NULL);
+Query OK, 0 rows affected (0.0338 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO estudiante
+                                     -> ('1', 'Muller'), ('2', 'Meier'), ('3', 'Tobler');
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''1', 'Muller'), ('2', 'Meier'), ('3', 'Tobler')' at line 2
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO estudiante VALUES('1', 'Muller'), ('2', 'Meier'), ('3', 'Tobler');
+Query OK, 3 rows affected (0.0200 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd1  SQL > SELECT * FROM estudiante;
++------+----------+
+| IDSt | LastName |
++------+----------+
+|    1 | Muller   |
+|    2 | Meier    |
+|    3 | Tobler   |
++------+----------+
+3 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE professor(
+                                     -> IDProf INT NOT NULL AUTO_INCREMENT KEY,
+                                     -> Prof VARCHAR(20));
+Query OK, 0 rows affected (0.0311 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO professor
+                                     -> VALUES ('1', 'Bernasconi'), ('2', 'Borner'), ('3', 'Schmid');
+Query OK, 3 rows affected (0.0151 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd1  SQL > SELECT * FROM professor;
++--------+------------+
+| IDProf | Prof       |
++--------+------------+
+|      1 | Bernasconi |
+|      2 | Borner     |
+|      3 | Schmid     |
++--------+------------+
+3 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE grade(
+                                     -> ID INT NOT NULL AUTO_INCREMENT KEY,
+                                     -> IDProf INT NOT NULL,
+                                     -> IDSt INT NOT NULL,
+                                     -> Grade INT NOT NULL);
+Query OK, 0 rows affected (0.0301 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE order(
+                                     -> Order_ID INT NOT NULL AUTO_INCREMENT KEY,
+                                     -> Order_Date DATE NOT NULL);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(
+Order_ID INT NOT NULL AUTO_INCREMENT KEY,
+Order_Date DATE NOT NULL)' at line 1
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE orders(Order_ID INT NOT NULL AUTO_INCREMENT KEY, Order_Date DATE NOT NULL);
+Query OK, 0 rows affected (0.0290 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > DROP TABLE orders;
+Query OK, 0 rows affected (0.0256 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE orders(
+                                     -> Cust_ID INT NOT NULL KEY,
+                                     -> Order_Date DATE NOT NULL,
+                                     -> Cust_ID INT NOT NULL);
+ERROR: 1060 (42S21): Duplicate column name 'Cust_ID'
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE orders( Order_ID INT NOT NULL KEY, Order_Date DATE NOT NULL, Cust_ID INT NOT NULL);
+Query OK, 0 rows affected (0.0187 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE customers(
+                                     -> Cust_ID INT NOT NULL AUTO_INCREMENT KEY,
+                                     -> Cust_name VARCHAR(50) NOT NULL,
+                                     -> Cust_Address VARCHAR(50) NOT NULL);
+Query OK, 0 rows affected (0.0283 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO customers
+                                     -> VALUES(2, 'Value Forniture', 'Plano, TX'), (6, 'Forniture Gallery', 'Boulder, CO'), (2, 'Value Forniture', 'Plano, Tx');
+ERROR: 1062 (23000): Duplicate entry '2' for key 'customers.PRIMARY'
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO customers VALUES(2, 'Value Forniture', 'Plano, TX'), (6, 'Forniture Gallery', 'Boulder, CO');
+Query OK, 2 rows affected (0.0144 sec)
+
+Records: 2  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO orders
+                                     -> VALUES(1006, '2004-10-24'),
+                                     -> (1007, '2004-10-25'),
+                                     -> (1008, '2004-11-1');
+ERROR: 1136 (21S01): Column count doesn't match value count at row 1
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO orders VALUES(1006, '2004-10-24', 2), (1007, '2004-10-25', 6), (1008, '2004-11-1', 2);
+Query OK, 3 rows affected (0.0147 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO orders
+                                     -> VALUES(1006, '2004-10-24'),
+                                     -> (1007, '2004-10-25'),
+                                     -> (1008, '2004-11-01');
+Query OK, 3 rows affected (0.0144 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE custname(
+                                     -> Cust_ID INT NOT NULL,
+                                     -> Cust_name VARCHAR(50;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+ MySQL  localhost:3306 ssl  tbd1  SQL > ALTER TABLE orders
+                                     -> ADD;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+ MySQL  localhost:3306 ssl  tbd1  SQL > DROP TABLE orders;
+Query OK, 0 rows affected (0.0256 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE orders(
+                                     -> Cust_ID INT NOT NULL KEY,
+                                     -> Order_Date DATE NOT NULL,
+                                     -> Cust_ID INT NOT NULL);
+ERROR: 1060 (42S21): Duplicate column name 'Cust_ID'
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE orders( Order_ID INT NOT NULL KEY, Order_Date DATE NOT NULL, Cust_ID INT NOT NULL);
+Query OK, 0 rows affected (0.0187 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE customers(
+                                     -> Cust_ID INT NOT NULL AUTO_INCREMENT KEY,
+                                     -> Cust_name VARCHAR(50) NOT NULL,
+                                     -> Cust_Address VARCHAR(50) NOT NULL);
+Query OK, 0 rows affected (0.0283 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO customers
+                                     -> VALUES(2, 'Value Forniture', 'Plano, TX'), (6, 'Forniture Gallery', 'Boulder, CO'), (2, 'Value Forniture', 'Plano, Tx');
+ERROR: 1062 (23000): Duplicate entry '2' for key 'customers.PRIMARY'
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO customers VALUES(2, 'Value Forniture', 'Plano, TX'), (6, 'Forniture Gallery', 'Boulder, CO');
+Query OK, 2 rows affected (0.0144 sec)
+
+Records: 2  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO orders
+                                     -> VALUES(1006, '2004-10-24'),
+                                     -> (1007, '2004-10-25'),
+                                     -> (1008, '2004-11-1');
+ERROR: 1136 (21S01): Column count doesn't match value count at row 1
+ MySQL  localhost:3306 ssl  tbd1  SQL > INSERT INTO orders VALUES(1006, '2004-10-24', 2), (1007, '2004-10-25', 6), (1008, '2004-11-1', 2);
+Query OK, 3 rows affected (0.0147 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE Employees(
+                                     -> Employee_ID VARCHAR(10) NOT NULL PRIMARY KEY,
+                                     -> Name VARCHAR(5;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE Employees(
+                                     -> Employee_ID INT NOT NULL AUTO_INCREMENT KEY,
+                                     -> Name VARCHAR(50) NOT NULL,
+                                     -> State_Code INT NOT NULL,
+                                     -> Home_State VARCHAR(50) NOT NULL);
+Query OK, 0 rows affected (0.0352 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > ALTER TABLE Employees
+                                     -> MODIFY Employees_ID VARCHAR(10) NOT NULL KEY;
+ERROR: 1054 (42S22): Unknown column 'Employees_ID' in 'employees'
+ MySQL  localhost:3306 ssl  tbd1  SQL > ALTER TABLE Employees MODIFY Employees_ID VARCHAR(10) NOT NULL PRIMARY KEY;
+ERROR: 1054 (42S22): Unknown column 'Employees_ID' in 'employees'
+ MySQL  localhost:3306 ssl  tbd1  SQL > ALTER TABLE Employees MODIFY Employee_ID VARCHAR(10) NOT NULL PRIMARY KEY;
+ERROR: 1068 (42000): Multiple primary key defined
+ MySQL  localhost:3306 ssl  tbd1  SQL > ALTER TABLE Employees DROP PRIMARY KEY;
+ERROR: 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+ MySQL  localhost:3306 ssl  tbd1  SQL > DROP TABLE Employees;
+Query OK, 0 rows affected (0.0246 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE Employees( Employee_ID VARCHAR(10) NOT NULL KEY, Name VARCHAR(50) NOT NULL, State_Code INT NOT NULL, Home_State VARCHAR(50) NOT NULL);
+Query OK, 0 rows affected (0.0336 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE Jobs(
+                                     -> Job_Code VARCHAR(10) NOT NULL KEY,
+                                     -> Job_Title VARCHAR(50));
+Query OK, 0 rows affected (0.0186 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > CREATE TABLE Empoyee_Jobs(
+                                     -> Employee_ID VARCHAR(10),
+                                     -> Job_Code VARCHAR(10),
+                                     -> PRIMARY KEY (Employee_ID, Job_Code),
+
+                                     -> FOREIGN KEY(Employee_ID) REFERENCES Employees(Employee_ID),
+                                     -> FOREIGN KEY(Job_Code) REFERENCES Jobs(Job_Code));
+Query OK, 0 rows affected (0.0721 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL >
